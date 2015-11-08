@@ -10,7 +10,7 @@
     <parent>
 	    <groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-    	<version>1.2.0.M2</version>
+    	<version>1.2.7.RELEASE</version>
 	</parent>
 
     <name>Apereo OpenLRS Project</name>
@@ -45,23 +45,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-	    <dependency>
-	      	<groupId>org.springframework.boot</groupId>
-	      	<artifactId>spring-boot-starter-thymeleaf</artifactId>
-	    </dependency>
-		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-			<version>1.2.7.RELEASE</version>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
        <!-- Apache commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -95,8 +82,12 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
 		</dependency>
-		
-    </dependencies>
+    <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk</artifactId>
+        <version>1.10.32</version>
+    </dependency>
+	</dependencies>
     <build>
 	    <plugins>
 	        <plugin>
