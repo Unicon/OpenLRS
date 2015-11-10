@@ -20,7 +20,10 @@ import java.util.List;
 
 import org.apereo.openlrs.model.OpenLRSEntity;
 import org.apereo.openlrs.storage.TierOneStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.amazonaws.services.kinesis.AmazonKinesisClient;
 
 /**
  * @author ggilbert
@@ -28,6 +31,8 @@ import org.springframework.stereotype.Component;
  */
 @Component("KinesisTierOneStorage")
 public class KinesisTierOneStorage implements TierOneStorage<OpenLRSEntity> {
+  
+  @Autowired private AmazonKinesisClient kinesisClient;
 
   @Override
   public OpenLRSEntity save(OpenLRSEntity entity) {

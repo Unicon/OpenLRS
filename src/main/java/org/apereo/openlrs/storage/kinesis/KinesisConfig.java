@@ -15,7 +15,10 @@
  */
 package org.apereo.openlrs.storage.kinesis;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.amazonaws.services.kinesis.AmazonKinesisClient;
 
 /**
  * @author ggilbert
@@ -23,5 +26,28 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class KinesisConfig {
+  
+  private String stream;
+  private String url;
 
+  @Bean
+  public AmazonKinesisClient kinesisClient() {
+    /*
+     * Note we expect that the api key and secret
+     * are available as system parameters either:
+     * Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_KEY
+     * Java System Properties - aws.accessKeyId and aws.secretKey
+     */
+    return new AmazonKinesisClient();
+  }
+  
+  @Bean(name="AWS_KINESIS_STREAM")
+  public String kinesisStreamName() {
+    return stream;
+  }
+  
+  @Bean(name="AWS_KINESIS_URL")
+  public String kinesisStreamUrl() {
+    return url;
+  }
 }
