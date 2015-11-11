@@ -15,15 +15,24 @@
  */
 package org.apereo.openlrs.storage.kinesis;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apereo.openlrs.model.OpenLRSEntity;
 import org.apereo.openlrs.storage.TierOneStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.kinesis.AmazonKinesisClient;
+import com.amazonaws.services.kinesis.model.PutRecordRequest;
+import com.amazonaws.services.kinesis.model.PutRecordResult;
+import com.amazonaws.services.kinesis.model.PutRecordsRequest;
+import com.amazonaws.services.kinesis.model.PutRecordsRequestEntry;
+import com.amazonaws.services.kinesis.model.PutRecordsResult;
 
 /**
  * @author ggilbert
@@ -31,19 +40,46 @@ import com.amazonaws.services.kinesis.AmazonKinesisClient;
  */
 @Component("KinesisTierOneStorage")
 public class KinesisTierOneStorage implements TierOneStorage<OpenLRSEntity> {
-  
+  private static Logger log = Logger.getLogger(KinesisTierOneStorage.class);
   @Autowired private AmazonKinesisClient kinesisClient;
-
+  @Autowired @Qualifier("AWS_KINESIS_STREAM") private String streamName;
+  private String partitionKey = "TENANT_ID";
+  
   @Override
   public OpenLRSEntity save(OpenLRSEntity entity) {
-    // TODO Auto-generated method stub
-    return null;
+    PutRecordRequest putRecordRequest = new PutRecordRequest();
+    putRecordRequest.setStreamName(streamName);
+    putRecordRequest.setPartitionKey(partitionKey);
+    String myData = entity.toJSON();
+    putRecordRequest.setData(ByteBuffer.wrap(myData.getBytes()));
+    PutRecordResult result = kinesisClient.putRecord(putRecordRequest);
+    log.debug("Successfully putrecord, partition key : " + putRecordRequest.getPartitionKey() 
+    + ", ShardID : " + result.getShardId() + "Sequence Number: "+result.getSequenceNumber());
+    return entity;
   }
 
+  //TODO this is untested!
   @Override
   public List<OpenLRSEntity> saveAll(Collection<OpenLRSEntity> entities) {
-    // TODO Auto-generated method stub
-    return null;
+    PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
+    putRecordsRequest.setStreamName(streamName);
+    putRecordsRequest.setRecords(createPutRecords(entities));
+    PutRecordsResult result = kinesisClient.putRecords(putRecordsRequest);
+    log.debug("Successfully putrecords, FaileRecordCount : " + result.getFailedRecordCount());
+    return (List<OpenLRSEntity>) entities;
+  }
+  
+  public Collection<PutRecordsRequestEntry> createPutRecords(Collection<OpenLRSEntity> entities) {
+      List<PutRecordsRequestEntry> records = new ArrayList<PutRecordsRequestEntry>();
+      
+      for(OpenLRSEntity entity: entities){
+          PutRecordsRequestEntry requestEntry = new PutRecordsRequestEntry();
+          requestEntry.withExplicitHashKey(null);
+          requestEntry.withData(ByteBuffer.wrap(entity.toJSON().getBytes()));
+          requestEntry.withPartitionKey(partitionKey);
+          records.add(requestEntry);
+      }
+      return records;
   }
 
 }
