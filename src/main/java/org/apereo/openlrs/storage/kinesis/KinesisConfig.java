@@ -22,6 +22,7 @@ import org.apereo.openlrs.utils.OAuthUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -36,6 +37,7 @@ import com.amazonaws.services.kinesis.model.PutRecordResult;
  *
  */
 @Configuration
+@Profile("aws")
 public class KinesisConfig {
   private static Logger log = Logger.getLogger(KinesisConfig.class);
 

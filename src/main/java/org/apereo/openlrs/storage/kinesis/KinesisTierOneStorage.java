@@ -25,6 +25,7 @@ import org.apereo.openlrs.model.OpenLRSEntity;
 import org.apereo.openlrs.storage.TierOneStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.kinesis.AmazonKinesisClient;
@@ -39,6 +40,7 @@ import com.amazonaws.services.kinesis.model.PutRecordsResult;
  *
  */
 @Component("KinesisTierOneStorage")
+@Profile("aws")
 public class KinesisTierOneStorage implements TierOneStorage<OpenLRSEntity> {
   private static Logger log = Logger.getLogger(KinesisTierOneStorage.class);
   @Autowired private AmazonKinesisClient kinesisClient;
