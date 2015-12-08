@@ -92,7 +92,6 @@ public class OpenLRSAuthenticationFilter extends OncePerRequestFilter {
 			
 			// TODO
 			// replace with multi-tenant support & protocol based retry logic
-			log.info("consumer key: " + oauth_consumer_key);
 			if (oauth_consumer_key != null) {
 				String storedKey = credentials.getKey(oauth_consumer_key);
 				if(storedKey != null && oauth_consumer_key.equals(storedKey)){
