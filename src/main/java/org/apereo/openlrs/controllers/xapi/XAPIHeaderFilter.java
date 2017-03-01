@@ -32,7 +32,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  *
  */
 @Component
-public class XAPIHeaderFilter extends OncePerRequestFilter {
+public class XApiHeaderFilter extends OncePerRequestFilter {
 	
 	@Value("${xapi.version}")
 	private String version;

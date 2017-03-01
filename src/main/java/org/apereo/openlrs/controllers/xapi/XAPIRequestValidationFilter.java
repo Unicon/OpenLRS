@@ -32,9 +32,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
  *
  */
 @Component
-public class XAPIRequestValidationFilter extends OncePerRequestFilter {
+public class XApiRequestValidationFilter extends OncePerRequestFilter {
 
-	private Logger log = Logger.getLogger(XAPIRequestValidationFilter.class);
+	private Logger log = Logger.getLogger(XApiRequestValidationFilter.class);
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
